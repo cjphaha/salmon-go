@@ -1,5 +1,6 @@
 package jwt
 
+//错误提示
 const (
 	JWT_ERROR_TOKEN					= "错误的token"
 	JWT_TOKEN_EXPIRED				= "token过期或未启用"

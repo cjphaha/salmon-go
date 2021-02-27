@@ -9,6 +9,7 @@ import (
 	"log"
 )
 
+//RSAVerify 非对称加密的接口
 type RSAVerify interface {
 	GenToken(jwtBody UserChaim) (token string, err error)
 	ParseToken(token string) (data *UserChaim, err error)
@@ -18,6 +19,7 @@ type rsaVerify struct {
 	pubPath, priPath string
 }
 
+//NewRSA 新建一个NewRSA对象
 func NewRSA(pubPath, priPath string) RSAVerify {
 	return &rsaVerify{
 		pubPath: pubPath,
@@ -25,9 +27,10 @@ func NewRSA(pubPath, priPath string) RSAVerify {
 	}
 }
 
-func (this *rsaVerify) getPubKey() (pubKey *rsa.PublicKey, err error) {
+//getPubKey 获取公钥
+func (r *rsaVerify) getPubKey() (pubKey *rsa.PublicKey, err error) {
 	// 公钥
-	pubKeyBytes, err := ioutil.ReadFile(this.pubPath)
+	pubKeyBytes, err := ioutil.ReadFile(r.pubPath)
 	if err != nil {
 		log.Fatal("公钥文件读取失败")
 	}
@@ -38,9 +41,10 @@ func (this *rsaVerify) getPubKey() (pubKey *rsa.PublicKey, err error) {
 	return
 }
 
-func (this *rsaVerify) getPriKey() (priKey *rsa.PrivateKey, err error) {
+//getPriKey 获取私钥
+func (r *rsaVerify) getPriKey() (priKey *rsa.PrivateKey, err error) {
 	// 私钥
-	priKeyBytes, err := ioutil.ReadFile(this.priPath)
+	priKeyBytes, err := ioutil.ReadFile(r.priPath)
 	if err != nil {
 		log.Fatal("私钥文件读取失败")
 	}
@@ -51,8 +55,9 @@ func (this *rsaVerify) getPriKey() (priKey *rsa.PrivateKey, err error) {
 	return
 }
 
-func (this *rsaVerify) GenToken(jwtBody UserChaim) (token string, err error){
-	priKey, err := this.getPriKey()
+//GenToken 生成token
+func (r *rsaVerify) GenToken(jwtBody UserChaim) (token string, err error){
+	priKey, err := r.getPriKey()
 	if err != nil {
 		return
 	}
@@ -64,8 +69,9 @@ func (this *rsaVerify) GenToken(jwtBody UserChaim) (token string, err error){
 	return
 }
 
-func (this *rsaVerify) ParseToken(token string) (data *UserChaim, err error) {
-	pubKey, err := this.getPubKey()
+//ParseToken 解密token
+func (r *rsaVerify) ParseToken(token string) (data *UserChaim, err error) {
+	pubKey, err := r.getPubKey()
 	if err != nil {
 		return
 	}
