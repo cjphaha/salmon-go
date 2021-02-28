@@ -1,4 +1,4 @@
-module salmon-go
+module gitee.com/cjphaha/salmon-go
 
 go 1.14
 
