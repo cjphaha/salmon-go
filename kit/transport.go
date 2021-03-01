@@ -4,12 +4,15 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"net/http"
 )
 
 // http 服务
 func DecodeRequest(c context.Context, r *http.Request) (interface{}, error) {
-	return r, nil
+	returnBody := &http.Request{}
+	awsutil.Copy(returnBody, r)
+	return returnBody, nil
 }
 
 func EncodeResponse(ctx context.Context, w http.ResponseWriter, response interface{}) error {
